@@ -5,10 +5,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 export default class Form extends React.Component {
     state = {
         firstName: "",
+        firstNameError:"",
         lastName: "",
+        lastNameError:"",
         username: "",
+        userNameError:"",
         email: "",
+        emailError:"",
         password: "", 
+        passwordError:"",
     };
 
     change = e => {
@@ -18,16 +23,59 @@ export default class Form extends React.Component {
         });
     };
 
+    validate = () => {
+        let isError = false;
+        const errors = {
+            firstNameError:"",
+            lastNameError:"",
+            userNameError:"",
+            emailError:"",
+            passwordError:"",
+        };
+
+        if (this.state.username.length < 5) {
+            isError = true;
+            errors.userNameError = " Username needs to be atleast 5 characters long";
+        } 
+        if (this.state.email.indexOf("@") === -1) {
+            isError = true;
+            errors.emailError = "Requires valid email";
+        } 
+
+         this.setState({
+             ...this.state,
+             ...errors
+         });
+         
+        return isError;
+    };
+
     onSubmit = e => {
         e.preventDefault();
-        this.setState({
-            firstName: "",
-            lastName: "",
-            username: "",
-            email: "",
-            password: "", 
-        });
-    };
+      
+        const err = this.validate();
+        if (!err) {
+            this.setState({
+                firstName: "",
+                firstNameError:"",
+                lastName: "",
+                lastNameError:"",
+                username: "",
+                userNameError:"",
+                email: "",
+                emailError:"",
+                password: "", 
+                passwordError:"",
+                });
+            this.props.onChange({
+                firstName: "",
+                lastName: "",
+                username: "",
+                email: "",
+                password: "", 
+             });
+         }
+ };
 
     render() {
         return (
@@ -37,7 +85,8 @@ export default class Form extends React.Component {
                         hintText="first name"
                         floatingLabelText="First name"
                         value={this.state.firstName} 
-                        onChange={e => this.change(e)} 
+                        onChange={e => this.change(e)}
+                        errorText={this.state.firstNameError} 
                         floatingLabelFixed
                         />
             <br />
@@ -47,15 +96,17 @@ export default class Form extends React.Component {
                         floatingLabelText="Last name"
                         value={this.state.lastName} 
                         onChange={e => this.change(e)} 
+                        errorText={this.state.lastNameError} 
                         floatingLabelFixed
                         />  
             <br />
                  <TextField
-                        name="userName"
-                        hintText="user name"
-                        floatingLabelText="username"
-                        value={this.state.userName} 
-                        onChange={e => this.change(e)} 
+                        name="username"
+                        hintText="Username"
+                        floatingLabelText="Username"
+                        value={this.state.username} 
+                        onChange={e => this.change(e)}
+                        errorText={this.state.userNameError}  
                         floatingLabelFixed
                         />
             <br />
@@ -64,7 +115,8 @@ export default class Form extends React.Component {
                         hintText="email"
                         floatingLabelText="email"
                         value={this.state.email} 
-                        onChange={e => this.change(e)} 
+                        onChange={e => this.change(e)}
+                        errorText={this.state.emailError}  
                         floatingLabelFixed
                         />
             <br />            
@@ -74,12 +126,13 @@ export default class Form extends React.Component {
                         floatingLabelText="password"
                         value={this.state.password} 
                         onChange={e => this.change(e)}
+                        errorText={this.state.passwordError} 
                         type="password" 
                         floatingLabelFixed
                         />
             <br />
 
-                <RaisedButton label="Submit"onClick={e => this.onSubmit(e)} primary />
+                <RaisedButton label="Submit" onClick={e => this.onSubmit(e)} primary />
             </form>
         );
     }
