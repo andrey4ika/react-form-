@@ -1,34 +1,54 @@
-import React, { Component } from 'react';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-import Form from './Form';
+import React, { Component } from "react";
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import injectTapEventPlugin from "react-tap-event-plugin";
+
 import "./App.css";
+import Form from "./Form";
+import Table from "./Table";
 
 injectTapEventPlugin();
 
 class App extends Component {
   state = {
-    fields: {}
+    data: []
   };
-
-onChange= updatedValue => {
-    this.setState({
-       fields: {
-        ...this.state.fields,
-        ...updatedValue
-      }
-    });
-};
 
   render() {
     return (
       <MuiThemeProvider>
-      <div className="App">
-        <Form onChange={fields => this.onChange(fields)} />
-          <p>
-            {JSON.stringify(this.state.fields, null, 2)}
-          </p>
-      </div>
+        <div className="App">
+          <Form
+            onSubmit={submission =>
+              this.setState({
+                data: [...this.state.data, submission]
+              })}
+          />
+          <Table
+            data={this.state.data}
+            header={[
+              {
+                name: "First name",
+                prop: "firstName"
+              },
+              {
+                name: "Last name",
+                prop: "lastName"
+              },
+              {
+                name: "Username",
+                prop: "username"
+              },
+              {
+                name: "Email",
+                prop: "email"
+              },
+              {
+                name: "Password",
+                prop:"password"
+              }
+            ]}
+          />
+        </div>
       </MuiThemeProvider>
     );
   }
