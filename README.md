@@ -1,5 +1,4 @@
-# react-form
-🔨 📏 live demo 
+# react-form application
 
 Getting started
 
